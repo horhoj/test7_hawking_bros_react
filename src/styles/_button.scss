@@ -1,0 +1,43 @@
+.button {
+  &__button {
+    background: #0880ae;
+    box-shadow: 0 2px 4px rgba(44, 39, 56, 0.08), 0 4px 8px rgba(44, 39, 56, 0.08);
+    border-radius: 6px;
+    height: 56px;
+    width: 100%;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 21px;
+    text-align: center;
+    color: #ebf4f8;
+
+    cursor: pointer;
+    padding: 10px 20px;
+
+
+    border: 2px solid #0880ae;
+
+
+    &:active {
+      opacity: 90%;
+    }
+
+    &:focus {
+      //border: 2px solid rgba(44, 39, 56, 0.86);
+    }
+  }
+
+  &__button.disabled {
+    background: #dbe2ea;
+    box-shadow: 0 2px 4px rgba(44, 39, 56, 0.08), 0 4px 8px rgba(44, 39, 56, 0.08);
+    border-radius: 6px;
+    color: #b1b5bf;
+
+    border: 2px solid #dbe2ea;
+
+    &:active {
+      opacity: 100%;
+    }
+  }
+}
