@@ -1,17 +1,18 @@
 import React from 'react';
-import { InputProps } from './types';
+import { SelectProps } from './types';
 
 const EMPTY_VALUE = '';
 
-export const Select: React.FC<InputProps> = ({
+export const Select: React.FC<SelectProps> = ({
   label,
   placeholder,
   value,
   onBlur,
   name,
   onChange,
+  optionList,
 }) => {
-  const empty = value === '';
+  const isEmpty = value === '';
 
   return (
     <div className="select__wrap">
@@ -23,16 +24,17 @@ export const Select: React.FC<InputProps> = ({
           name={name}
           onBlur={onBlur}
           onChange={onChange}
-          className={`select__select ${empty ? 'empty' : ''}`}
+          className={`select__select ${isEmpty ? 'empty' : ''}`}
           value={value}
         >
           <option value={EMPTY_VALUE} hidden disabled>
             {placeholder}
           </option>
-          <option value="x1">1111111</option>
-          <option value="x2">2222222</option>
-          <option value="x3">3333333</option>
-          <option value="x4">4444444</option>
+          {optionList.map((option) => (
+            <option value={option.value} key={option.id}>
+              {option.title}
+            </option>
+          ))}
         </select>
       </div>
     </div>

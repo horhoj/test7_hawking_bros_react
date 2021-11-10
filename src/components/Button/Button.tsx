@@ -7,7 +7,7 @@ export const Button: React.FC<ButtonProps> = ({
   type,
 }) => {
   return (
-    <div>
+    <div className="button__wrap">
       <button
         type={type}
         disabled={disabled}

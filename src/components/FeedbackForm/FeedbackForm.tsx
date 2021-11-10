@@ -1,9 +1,12 @@
 import { FC } from 'react';
 import { useFormik } from 'formik';
+import axios from 'axios';
+import { Simulate } from 'react-dom/test-utils';
 import { Input } from '../Input';
 import { Button } from '../Button';
 import { Select } from '../Select';
 import { ErrorMsg } from '../ErrorMsg';
+import { SelectOption } from '../Select/types';
 import { Feedback, FeedbackFormValidationSchema } from './types';
 
 const INITIAL_VALUES: Feedback = {
@@ -13,13 +16,39 @@ const INITIAL_VALUES: Feedback = {
   category: '',
   message: '',
   img: '',
+  file: null,
 };
+
+const OPTION_LIST: SelectOption[] = [
+  { id: 1, title: 'Ошибка', value: 'error' },
+  { id: 2, title: 'Сообщение', value: 'message' },
+  { id: 3, title: 'Жалоба', value: 'complaint' },
+  { id: 4, title: 'Уведомление', value: 'Notification' },
+];
 
 export const FeedbackForm: FC = () => {
   const formik = useFormik<Feedback>({
     initialValues: INITIAL_VALUES,
     onSubmit: (values) => {
-      const msg = JSON.stringify(values, null, 2);
+      //формируем объект для передачи данных
+      const formData = new FormData();
+      formData.append('name', values.name);
+      formData.append('family', values.family);
+      formData.append('email', values.email);
+      formData.append('category', values.category);
+      formData.append('message', values.message);
+      if (values.file) {
+        formData.append('file', values.file);
+      }
+      //отправляем
+
+      axios.post('http://localhost.dev', formData).catch((error) => {
+        console.log(error);
+      });
+
+      const msg =
+        'Данные для примера отправлены на несуществующий адрес "http://localhost.dev" !!! ' +
+        'Подробности на вкладке NETWORK в devTools Браузера, либо в консоли!';
       alert(msg);
     },
     validationSchema: FeedbackFormValidationSchema,
@@ -68,7 +97,7 @@ export const FeedbackForm: FC = () => {
           <div className="feedback-form__element">
             <Input
               label={'email'}
-              placeholder={'введите имя'}
+              placeholder={'введите email'}
               type={'text'}
               {...formik.getFieldProps('email')}
             />
@@ -83,6 +112,7 @@ export const FeedbackForm: FC = () => {
             <Select
               label={'Категория'}
               placeholder={'выберите категорию'}
+              optionList={OPTION_LIST}
               {...formik.getFieldProps('category')}
             />
             <ErrorMsg
@@ -112,18 +142,31 @@ export const FeedbackForm: FC = () => {
           </div>
         </div>
         <div className="feedback-form__elements-wrap">
-          <Input
-            label={'выберите картинку'}
-            placeholder={'выберите картинку'}
-            type={'file'}
-            value={''}
-            name={''}
-            onBlur={() => {}}
-            onChange={() => {}}
-          />
+          <div className="feedback-form__element">
+            <Input
+              label={'выберите картинку'}
+              placeholder={'выберите картинку'}
+              type={'file'}
+              {...formik.getFieldProps('img')}
+              onChange={(e) => {
+                formik.setFieldValue('img', e.target.value);
+                if (e.target.files) {
+                  formik.setFieldValue('file', e.target.files[0]);
+                }
+              }}
+            />
+            <ErrorMsg
+              showError={
+                Boolean(formik.touched.img) && Boolean(formik.errors.file)
+              }
+              error={formik.errors.file}
+            />
+          </div>
         </div>
         <div className="feedback-form__elements-wrap">
-          <Button type={'submit'} caption={'Отправить'} />
+          <div className="feedback-form__submit-button-wrap">
+            <Button type={'submit'} caption={'Отправить'} />
+          </div>
         </div>
       </form>
     </div>
