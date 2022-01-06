@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { useFormik } from 'formik';
 import axios from 'axios';
-import { Simulate } from 'react-dom/test-utils';
 import { Input } from '../Input';
 import { Button } from '../Button';
 import { Select } from '../Select';
@@ -43,6 +42,7 @@ export const FeedbackForm: FC = () => {
       //отправляем
 
       axios.post('http://localhost.dev', formData).catch((error) => {
+        // eslint-disable-next-line no-console
         console.log(error);
       });
 
