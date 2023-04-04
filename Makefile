@@ -1,4 +1,5 @@
 init: docker-up install prod
+ddev: docker-up install dev
 
 #all
 docker-up: docker-down
